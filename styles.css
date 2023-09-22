@@ -1,0 +1,29 @@
+
+.nav {
+    background-color: #001A37;
+    color: white;
+    display:flex;
+}
+.nav-list{
+    display:flex;
+    list-style: none;
+    flex-direction: row;
+}
+.nav-list li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+}
+
+.nav-element {
+    display: flex;
+    justify-content: center;
+}
+.logo img{
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+    filter:invert(1);
+}
