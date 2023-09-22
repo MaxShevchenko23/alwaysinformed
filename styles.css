@@ -1,14 +1,15 @@
 *{
     margin: 0;
 }
+
 .logo {
     height: 50px;
     width: 50px;
     object-fit: contain;
     filter:invert(1);
     vertical-align: middle;
-    
 }
+
 nav {
     background-color: #001A37;
     width: 100%;
@@ -16,7 +17,51 @@ nav {
     justify-content: space-between;
     align-items: center;
 }
+
 .nav-button{
     padding: 0 10px 0 10px;
 }
 
+
+  
+main {
+    display: flex;    
+    margin: 10px;
+}
+
+.column{
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    padding: 10px;
+    display: inline-block;
+
+}
+
+.column img{
+    text-align: center;
+}
+.row-1 {
+    height: 100%
+    
+}
+
+.article-image {
+    
+    width: 100%;
+    display: inline-block;
+}
+.article-header{
+
+}
+.article-content {
+    
+}
+.column-1 {
+    width: 30%;
+}
+.column-2 {
+    width: 30%;
+}
+.column-3 {
+    width: 40%;
+}
