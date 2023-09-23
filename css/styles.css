@@ -20,6 +20,14 @@ nav {
 
 .nav-button{
     padding: 0 10px 0 10px;
+    text-decoration: none;
+}
+
+nav a {
+    color: white;
+}
+nav a:hover {
+    color: white;
 }
  
 main {    
@@ -46,7 +54,6 @@ main {
 
 
 .article-image {
-    
     width: 100%;
     display: inline-block;
 }
