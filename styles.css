@@ -21,11 +21,8 @@ nav {
 .nav-button{
     padding: 0 10px 0 10px;
 }
-
-
-  
-main {
-    display: flex;    
+ 
+main {    
     margin: 10px;
 }
 
@@ -34,16 +31,19 @@ main {
     border: 1px solid #ddd;
     padding: 10px;
     display: inline-block;
-
+    vertical-align: top;
+    margin: 3px;    
 }
 
 .column img{
     text-align: center;
 }
-.row-1 {
-    height: 100%
-    
+.row {
+    height: 100%;
+    display: flex;
+    margin: 5px auto auto auto;    
 }
+
 
 .article-image {
     
@@ -57,11 +57,12 @@ main {
     
 }
 .column-1 {
-    width: 30%;
+    width: 25%;
+    /* width: calc(33.33% - 20px); */
 }
 .column-2 {
-    width: 30%;
+    width: 25%;
 }
 .column-3 {
-    width: 40%;
+    width: 50%;
 }
