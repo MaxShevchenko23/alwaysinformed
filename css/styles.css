@@ -52,7 +52,6 @@ main {
     margin: 5px auto auto auto;    
 }
 
-
 .article-image {
     width: 100%;
     display: inline-block;
@@ -72,4 +71,21 @@ main {
 }
 .column-3 {
     width: 50%;
+}
+#footer {
+    background-color: #001A37;
+    color: lightgrey;
+}
+.footer_buttons{
+    column-count: 2;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    gap:20px;
+    
+
+}
+#footer .copy{
+    padding: 30px 0 10px;
+    
 }
