@@ -3,6 +3,7 @@
     <head>
         <link rel="stylesheet" type="text/css" href="css/article.css">
     </head>
+    
     <body>
         <div class="nav">
             <nav>
@@ -103,5 +104,18 @@
                 </div>
             </div>
         </footer>
+        <script>
+            (function() {
+                var location = window.location.search;
+                console.log(location);
+                var urlParams = new URLSearchParams(location);
+                console.log(urlParams);
+                var data = urlParams.get("article-id");
+                console.log(data.toString());
+    
+                document.querySelector('#article-name h1').innerHTML += data;
+                // name.innerHTML = '<h1>Article\'s id is' + data +  '</h1>';
+            })()
+        </script>
     </body>
 </html>
