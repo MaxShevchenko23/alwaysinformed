@@ -30,7 +30,7 @@
         <main>
             <div class="row">
                 <div class="column-1 column">
-                    <a href="article.html"><a href="article.html"><img class="article-image" src="img/article preview template.jpg"></a></a>
+                    <a href="article.html"><img class="article-image" src="img/article preview template.jpg"></a></a>
                     <h2 class="article-header" >Article header</h2>
                     <p class="article-content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam dolor atque ullam laudantium officiis harum animi explicabo! Sed debitis rem corporis ullam modi, cupiditate alias esse aspernatur doloribus, nemo architecto.</p>
                 </div>
@@ -112,8 +112,37 @@
     </footer>
     </body>
     <script>
-        function test() {
-            console.log("ok")
-        }
+        window.onload = function(){
+            fetch('https://localhost:7115/api/Article/Home')
+            .then(response => response.json())
+            .then(data => {
+                    console.log(data);
+
+                    if (data.length === 0) {
+                        alert('Нет доступных статей для отображения.');
+                        return;
+                    }
+
+                    const columns = document.getElementsByClassName('column');
+
+                    for (let i = 0; i < data.length; i++) 
+                    {
+                        if (i >= columns.length) 
+                        {
+                            break; 
+                        }
+
+                        const article = data[i];
+                        columns[i].innerHTML = `<a href="${'article.html?article-url=' + article.url}"><img class="article-image" src="${article.image}" alt="image"></a>
+                            <h2 class="article-header">${article.title}</h2>
+                            <p class="article-content">${article.shortDescription}</p>`;
+                    }
+    })
+    .catch(error => {
+        console.error('Произошла ошибка при выполнении запроса:', error);
+    });
+
+        }();
+
     </script>
 </html>

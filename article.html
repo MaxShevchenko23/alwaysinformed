@@ -36,6 +36,9 @@
                 <div class="date">Published: 23.09.2023 12:58</div>
                 <div class="author">Author: Max Shevchenko</div>
             </div>
+            <div id="article-image">
+                <img class="article-image" src="">
+            </div>
             <div id="article-content">
                 <article>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
                     Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
@@ -52,10 +55,7 @@
                     Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
                 </article><br>
 
-                <img class="article-image" src="img/article preview template.jpg">
-                
-                <div class="description">Some desciption</div>
-                
+                            
                 <article>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
                     Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
                     Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
@@ -110,10 +110,22 @@
                 console.log(location);
                 var urlParams = new URLSearchParams(location);
                 console.log(urlParams);
-                var data = urlParams.get("article-id");
+                var data = urlParams.get("article-url");
                 console.log(data.toString());
-    
-                document.querySelector('#article-name h1').innerHTML += data;
+                
+                fetch('https://localhost:7115/api/Article/' + data.toString())
+                .then(response => response.json())
+                .then(data => {
+                    const title = document.querySelector('#article-name h1');
+                    const scontent = document.getElementById('article-content');
+
+                    const image = document.querySelector('#article-image img');
+                    title.innerHTML = data.title;
+                    
+                    scontent.innerHTML = data.content;  
+                    image.src = data.image.toString();                 
+                });
+                // document.querySelector('#article-name h1').innerHTML += data;
                 // name.innerHTML = '<h1>Article\'s id is' + data +  '</h1>';
             })()
         </script>
