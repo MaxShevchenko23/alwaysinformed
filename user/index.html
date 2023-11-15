@@ -1,12 +1,12 @@
 <!doctype html>
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="css/styles.css">
+        <link rel="stylesheet" type="text/css" href="../css/styles.css">
     </head>
     <body>
         <div class="nav">
             <nav>
-                <img class="logo" src="img/logo template.png">
+                <img class="logo" src="../img/logo template.png">
                 <a class="nav-button" href="#">
                     Home
                 </a>
@@ -113,7 +113,7 @@
     </body>
     <script>
         window.onload = function(){
-            fetch('https://localhost:7115/api/Article/Home')
+            fetch('https://localhost:7115/api/Article/get/short/last?n=10')
             .then(response => response.json())
             .then(data => {
                     console.log(data);

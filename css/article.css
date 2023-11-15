@@ -47,12 +47,13 @@ h1{
 #article-content {
     margin: 10px 20px ;
 }
-.article-image{
-    width: 100%;
+#article-image{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .description{
     font-size: 0.7em;
-    
 }
 #footer {
     background-color: #001A37;
@@ -64,10 +65,7 @@ h1{
     justify-content: center;
     align-items: center;
     gap:20px;
-    
-
 }
 #footer .copy{
     padding: 30px 0 10px;
-    
 }

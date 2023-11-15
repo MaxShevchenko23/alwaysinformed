@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Author page</title>
+    <link rel="stylesheet" href="../css/author.css" type="text/css">
+</head>
+<body>
+    <p>Type userId to which this author is attached to</p>
+    <input id="testfield" type="number" placeholder=userId required>
+    <input type="button" value="Load" onclick="load()">  
+    <table>
+        <colgroup span="5"></colgroup>
+        <tr>
+          <th>Title</th>
+          <th>status</th>
+          <th>category</th>
+          <th>date</th>
+          <th>URL</th>
+        </tr>
+        
+        
+      </table>
+</body>
+<script>
+
+    let categories;
+    let articleStatuses;
+    (function () {
+                    fetch('https://localhost:7115/api/Category')
+                    .then(response =>response.json())
+                    .then(data=>categories=data);
+
+                    fetch('https://localhost:7115/api/ArticleSandboxStatus')
+                    .then(response =>response.json())
+                    .then(data=>articleStatuses=data);
+    })();
+    
+    function load(){
+        let userId = document.getElementById('testfield').value;
+        if(userId==0){
+            fetch("https://localhost:7115/api/ArticleSandbox")
+            .then(response=>response.json())
+            .then(data=>fillTheTable(data));
+            return;
+        }
+        fetch('https://localhost:7115/api/ArticleSandbox/getbyuserid?userId='+userId)
+        .then(response=>response.json())
+        .then(data=>fillTheTable(data));
+    }
+
+    function fillTheTable(data){
+        const table = document.querySelector('table');
+
+            console.log(data);
+
+            data.forEach(article => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${article.title}</td>
+                    <td>${getStatusById(article.articleStatus)}</td>
+                    <td>${getCategoryById(article.categoryId)}</td>
+                    <td>${article.publicationDate}</td>
+                    <td><a href="${article.url}" target="_blank">${article.url}</a></td>
+                        `;
+                    table.appendChild(row);
+            });
+    }
+    function getStatusById(statusId) {
+        const foundStatus = articleStatuses.find(status => status.statusId === statusId);
+
+        if (foundStatus) {
+          return foundStatus.statusName;
+        } else {
+          return "Status not found";
+        }
+    }
+
+    function getCategoryById(categoryId){
+        const categoryFound = categories.find(cat=>cat.categoryId = categoryId);
+
+        if(categoryFound){
+            return categoryFound.categoryName;
+        }
+        else{
+            return "Not Found"
+        }
+    }
+
+    function loadSandboxArticle(url){
+        
+    }
+</script>
+</html>
