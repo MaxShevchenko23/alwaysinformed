@@ -27,7 +27,7 @@
 
     let categories;
     let articleStatuses;
-    (function () {
+    (function(){
                     fetch('https://localhost:7115/api/Category')
                     .then(response =>response.json())
                     .then(data=>categories=data);
@@ -55,15 +55,23 @@
 
             console.log(data);
 
-            data.forEach(article => {
+            data.forEach(articleSandbox => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${article.title}</td>
-                    <td>${getStatusById(article.articleStatus)}</td>
-                    <td>${getCategoryById(article.categoryId)}</td>
-                    <td>${article.publicationDate}</td>
-                    <td><a href="${article.url}" target="_blank">${article.url}</a></td>
-                        `;
+                    <td>${articleSandbox.title}</td>
+                    <td>${getStatusById(articleSandbox.articleStatus)}</td>
+                    <td>${getCategoryById(articleSandbox.categoryId)}</td>
+                    <td>${articleSandbox.publicationDate}</td>
+                    <td>${articleSandbox.url}</a></td>`;
+                    if(articleSandbox.articleStatus == 2){
+                        row.innerHTML+=`<td><a href="${'../user/article.html?article-url=' + articleSandbox.url}" target="_blank">Open</td>
+                    <td><a href="articlesandboxedit.html?article-url=${articleSandbox.url}" target='_blank'>Edit</td>`;
+                    }
+                    else{
+                        row.innerHTML+=`<td>Open</td>
+                    <td><a href="../author/articlesandboxedit.html" target='_blank'>Edit</td>`;
+                    }
+                    
                     table.appendChild(row);
             });
     }
@@ -86,10 +94,6 @@
         else{
             return "Not Found"
         }
-    }
-
-    function loadSandboxArticle(url){
-        
     }
 </script>
 </html>

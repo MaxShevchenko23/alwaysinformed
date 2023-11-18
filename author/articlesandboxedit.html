@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Sandbox Edit</title>
+</head>
+<body>
+    <form action="/action_page.php">
+        <label for="title">Title</label><br>
+        <input type="text" id="title" name="title" value="title"><br><br>
+
+        <label for="category">Category</label><br>
+        <select name="categories" id="categories">
+            
+        </select><br><br>
+        <label for="image">Image URL</label><br>
+        <input type="text" id="image" name="image" value="image"><br><br>
+
+        <label for="short">Short description</label><br>
+        <input type="text" id="short" name="short" value="short"><br><br>
+
+        <label for="content">Content</label><br>
+        <input type="text" id="content" name="content" value="content"><br><br>
+
+        <input type="submit" value="Save">
+      </form> 
+</body>
+<script>
+
+    let categories;
+    const selector = document.querySelector('select');
+    
+    const title = document.getElementById('title');
+    const image = document.getElementById('image');
+    const short = document.getElementById('short');
+    const content = document.getElementById('content');
+
+
+    let categoryId;
+
+    (function () {
+
+        var location = window.location.search;
+                console.log(location);
+                var urlParams = new URLSearchParams(location);
+                console.log(urlParams);
+                var data = urlParams.get("article-url");
+                console.log(data.toString());
+
+
+    fetch('https://localhost:7115/api/ArticleSandbox/get/url?url=' + data)
+    .then(response => response.json())
+    .then(article => {
+        title.value = article.title;
+        image.value = article.image;
+        short.value = article.shortDescription;
+        content.value = article.content;
+
+        categoryId = article.categoryId;
+    })
+    .catch(() => console.log('Fetching failed'));
+
+
+    fetch('https://localhost:7115/api/Category')
+    .then(response => response.json())
+    .then(data => {
+        categories = data;
+        console.log(categories);
+
+        categories.forEach(cat => {
+            selector.innerHTML += `<option value='${cat.categoryId}'>${cat.categoryName}</option>`;
+        });
+    })
+    .catch(() => console.log('Fetching failed'));
+
+    
+    const defaultOption = document.querySelector(`#categories option[value=${categoryId}]`);
+    defaultOption.selected = true;
+
+})();
+    
+    function getCategoryById(categoryId){
+        const categoryFound = categories.find(cat=>cat.categoryId = categoryId);
+
+        if(categoryFound){
+            return categoryFound.categoryName;
+        }
+        else{
+            return "Not Found"
+        }
+    }
+</script>
+</html>
