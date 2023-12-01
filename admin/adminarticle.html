@@ -73,21 +73,6 @@
             </div>
            
         </main>
-
-        <h3>Comments</h3>
-        <section id="comments">
-        
-            <!-- <div class="comment">
-                <p><strong>User1:</strong> Good article!</p>
-                <small>Posted on: 2023-11-26 12:30</small>
-            </div>
-        
-            <div class="comment">
-                <p><strong>Guest123:</strong> Interesting read.</p>
-                <small>Posted on: 2023-11-26 13:45</small>
-            </div> -->
-                
-        </section>
         <footer>
             <div id="footer">
                 <div class="footer_buttons">
@@ -120,27 +105,20 @@
             </div>
         </footer>
         <script>
-            let articleId;
-            let comments;
-            
-            const commentSection = document.querySelector('section');
             (function() {
                 var location = window.location.search;
                 console.log(location);
                 var urlParams = new URLSearchParams(location);
                 console.log(urlParams);
-                var data = urlParams.get("article-url");
+                var data = urlParams.get("articlesandbox-url");
                 console.log(data.toString());
                 
-                fetch('https://localhost:7115/api/Article/get/full/url?url=' + data.toString())
+                fetch('https://localhost:7115/api/ArticleSandbox/get/url?url=' + data.toString())
                 .then(response => response.json())
                 .then(data => {
-                    
-                    articleId = data.articleId;
-                    console.log(articleId);
 
                     const title = document.querySelector('#article-name h1');
-                    const scontent = document.getElementById('article-content');
+                    const content = document.getElementById('article-content');
                     
                     const publicationDate = document.querySelector('#article-metainfo .date');
 
@@ -148,10 +126,12 @@
                     
                     title.innerHTML = data.title;
                     
-                    scontent.innerHTML = data.content;  
+                    content.innerHTML = data.content;  
                     image.src = data.image.toString();
                     
                     publicationDate.innerHTML = 'Published ' + data.publicationDate.replace('T', ' ');
+
+
 
                     fetch('https://localhost:7115/api/Author/get/id?id=' + data.authorId)
                     .then(response=>response.json())
@@ -159,28 +139,11 @@
                         const author = document.querySelector('#article-metainfo .author');
                         author.innerHTML = 'Author ' + data.firstName + ' ' + data.lastName;
                     });
-                    
-                    commentsSetting(articleId);
+
                 });
+                // document.querySelector('#article-name h1').innerHTML += data;
+                // name.innerHTML = '<h1>Article\'s id is' + data +  '</h1>';
             })()
-
-
-            function commentsSetting(articleId) {
-                console.log('comment fetching started for article ' + articleId);
-                fetch(`https://localhost:7115/api/Comment/getbyaarticleid?articleId=${articleId}`)
-                .then(response => response.json())
-                .then(data => {
-                        data.forEach(comment => {
-                            commentSection.innerHTML += `<div class="comment">
-                                                            <strong>${comment.userName}</strong>
-                                                            <p> ${comment.text}</p>
-                                                            <small>Posted on: 2023-11-26 12:30</small>
-                                                        </div>`
-                        });
-                        })
-                        .catch(() => console.log('comment fetching failed'));
-}
-
         </script>
     </body>
 </html>

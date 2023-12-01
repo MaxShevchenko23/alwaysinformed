@@ -3,21 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Author page</title>
-    <link rel="stylesheet" href="../css/author.css" type="text/css">
+    <title>Author page</title>
+    <!-- <link rel="stylesheet" href="../css/author.css" type="text/css"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-    <p>Type userId to which this author is attached to</p>
-    <input id="testfield" type="number" placeholder=userId required>
-    <input type="button" value="Load" onclick="load()">  
-    <table>
+    <nav>
+        <p class="p-3 fw-bold">Type userId to which this author is attached to</p>
+        <input type="number" class="input-group-sm" id="testfield"  placeholder=userId required>
+        <input type="button" class="btn-outline-primary" value="Load" onclick="load()"> 
+        <input type="button" class="btn-outline-secondary" onclick="location.href ='articlesandboxcreate.html';" value="Create">
+
+    </nav>
+    <table class="table">
         <colgroup span="5"></colgroup>
         <tr>
-          <th>Title</th>
-          <th>status</th>
-          <th>category</th>
-          <th>date</th>
-          <th>URL</th>
+          <th class="col-1 border">Title</th>
+          <th class="col-2 border">status</th>
+          <th class="col-3 border">category</th>
+          <th class="col-4 border">date</th>
+          <th class="col-5 border">URL</th>
         </tr>
         
         
@@ -28,13 +33,13 @@
     let categories;
     let articleStatuses;
     (function(){
-                    fetch('https://localhost:7115/api/Category')
-                    .then(response =>response.json())
-                    .then(data=>categories=data);
+        fetch('https://localhost:7115/api/Category')
+        .then(response =>response.json())
+        .then(data=>categories=data);
 
-                    fetch('https://localhost:7115/api/ArticleSandboxStatus')
-                    .then(response =>response.json())
-                    .then(data=>articleStatuses=data);
+        fetch('https://localhost:7115/api/ArticleSandboxStatus')
+        .then(response =>response.json())
+        .then(data=>articleStatuses=data);
     })();
     
     function load(){
@@ -58,18 +63,19 @@
             data.forEach(articleSandbox => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${articleSandbox.title}</td>
-                    <td>${getStatusById(articleSandbox.articleStatus)}</td>
-                    <td>${getCategoryById(articleSandbox.categoryId)}</td>
-                    <td>${articleSandbox.publicationDate}</td>
-                    <td>${articleSandbox.url}</a></td>`;
+                    <td class="col-1 border">${articleSandbox.title}</td>
+                    <td class="col-2 border">${getStatusById(articleSandbox.articleStatus)}</td>
+                    <td class="col-3 border">${getCategoryById(articleSandbox.categoryId)}</td>
+                    <td class="col-4 border">${articleSandbox.publicationDate}</td>
+                    <td class="col-5 border">${articleSandbox.url}</a></td>`;
+                    
                     if(articleSandbox.articleStatus == 2){
-                        row.innerHTML+=`<td><a href="${'../user/article.html?article-url=' + articleSandbox.url}" target="_blank">Open</td>
-                    <td><a href="articlesandboxedit.html?article-url=${articleSandbox.url}" target='_blank'>Edit</td>`;
+                        row.innerHTML+=`<td><div class="btn btn-primary m-1 text-dark"><a href="${'../user/article.html?article-url=' + articleSandbox.url}" target="_blank">Open</a></div></td>
+                                        <td><a href="articlesandboxedit.html?article-url=${articleSandbox.url}" class="btn btn-warning" target='_blank'>Edit</td>`;
                     }
                     else{
-                        row.innerHTML+=`<td>Open</td>
-                    <td><a href="../author/articlesandboxedit.html" target='_blank'>Edit</td>`;
+                        row.innerHTML+=`<td><div class="text-decoration-line-through">Open</div></td>
+                                        <td><a href="articlesandboxedit.html?article-url=${articleSandbox.url}" class="btn btn-warning" target='_blank'>Edit</td>`;
                     }
                     
                     table.appendChild(row);
@@ -86,7 +92,7 @@
     }
 
     function getCategoryById(categoryId){
-        const categoryFound = categories.find(cat=>cat.categoryId = categoryId);
+        const categoryFound = categories.find(cat=>cat.categoryId == categoryId);
 
         if(categoryFound){
             return categoryFound.categoryName;

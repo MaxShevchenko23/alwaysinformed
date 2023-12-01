@@ -4,62 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Article Sandbox Edit</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-    <form action="/action_page.php">
+    <header class="offcanvas-header">Article editing page</header>
+    <form class="form-control">
         <label for="title">Title</label><br>
-        <input type="text" id="title" name="title" value="title"><br><br>
+        <input class="input-group-text" type="text" id="title" name="title" value="title"><br><br>
 
         <label for="category">Category</label><br>
-        <select name="categories" id="categories">
+        <select class="form-select-sm" name="categories" id="categories">
             
         </select><br><br>
         <label for="image">Image URL</label><br>
-        <input type="text" id="image" name="image" value="image"><br><br>
+        <input class="input-group-text" type="text" id="image" name="image" value="image"><br><br>
 
         <label for="short">Short description</label><br>
-        <input type="text" id="short" name="short" value="short"><br><br>
+        <input class="input-group-text" type="text" id="short" name="short" value="short"><br><br>
 
         <label for="content">Content</label><br>
-        <input type="text" id="content" name="content" value="content"><br><br>
+        <input class="input-group-text" type="text" id="content" name="content" value="content"><br><br>
 
-        <input type="submit" value="Save">
+        <button class="btn-success" type="button" onclick="submitData()">Save</button>
       </form> 
 </body>
 <script>
 
-    let categories;
     const selector = document.querySelector('select');
-    
     const title = document.getElementById('title');
     const image = document.getElementById('image');
     const short = document.getElementById('short');
     const content = document.getElementById('content');
-
-
+    
+    let categories;
     let categoryId;
+
+    let articleFromBack;
 
     (function () {
 
         var location = window.location.search;
-                console.log(location);
-                var urlParams = new URLSearchParams(location);
-                console.log(urlParams);
-                var data = urlParams.get("article-url");
-                console.log(data.toString());
-
-
+        var urlParams = new URLSearchParams(location);
+        var data = urlParams.get("article-url");
+                
     fetch('https://localhost:7115/api/ArticleSandbox/get/url?url=' + data)
     .then(response => response.json())
     .then(article => {
+        articleFromBack = article;
+
         title.value = article.title;
         image.value = article.image;
         short.value = article.shortDescription;
         content.value = article.content;
 
         categoryId = article.categoryId;
+        console.log(categoryId);
     })
-    .catch(() => console.log('Fetching failed'));
+    .catch(() => console.log('Fetching failed(article)'));
 
 
     fetch('https://localhost:7115/api/Category')
@@ -69,26 +70,49 @@
         console.log(categories);
 
         categories.forEach(cat => {
-            selector.innerHTML += `<option value='${cat.categoryId}'>${cat.categoryName}</option>`;
+            if(cat.categoryId == categoryId)
+            {
+                selector.innerHTML += `<option selected="selected" value='${cat.categoryId}'>${cat.categoryName}</option>`;
+            }
+            else{
+                selector.innerHTML += `<option value='${cat.categoryId}'>${cat.categoryName}</option>`;
+            }
         });
     })
-    .catch(() => console.log('Fetching failed'));
-
-    
-    const defaultOption = document.querySelector(`#categories option[value=${categoryId}]`);
-    defaultOption.selected = true;
-
-})();
+    .catch(() => console.log('Fetching failed(category)'));
+    })();
     
     function getCategoryById(categoryId){
         const categoryFound = categories.find(cat=>cat.categoryId = categoryId);
 
+        console.log(categoryFound);
         if(categoryFound){
             return categoryFound.categoryName;
         }
         else{
             return "Not Found"
         }
+    }
+
+    function submitData(){
+        const article = articleFromBack;
+
+        article.title = title.value;
+        article.categoryId = parseInt(selector.value, 10);
+        article.image = image.value;
+        article.shortDescription = short.value;
+        article.content = content.value;
+
+        console.log(article);
+
+        const requestOptions = {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(article)
+                };
+
+        fetch('https://localhost:7115/api/ArticleSandbox',requestOptions)
+        .catch('submitting failed');
     }
 </script>
 </html>
