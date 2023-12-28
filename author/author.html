@@ -33,11 +33,11 @@
     let categories;
     let articleStatuses;
     (function(){
-        fetch('https://localhost:7115/api/Category')
+        fetch('https://localhost:7115/api/admin/categories')
         .then(response =>response.json())
         .then(data=>categories=data);
 
-        fetch('https://localhost:7115/api/ArticleSandboxStatus')
+        fetch('https://localhost:7115/ArticleSandboxStatus')
         .then(response =>response.json())
         .then(data=>articleStatuses=data);
     })();
@@ -45,12 +45,12 @@
     function load(){
         let userId = document.getElementById('testfield').value;
         if(userId==0){
-            fetch("https://localhost:7115/api/ArticleSandbox")
+            fetch("https://localhost:7115/api/admin/sandbox")
             .then(response=>response.json())
             .then(data=>fillTheTable(data));
             return;
         }
-        fetch('https://localhost:7115/api/ArticleSandbox/getbyuserid?userId='+userId)
+        fetch('https://localhost:7115/api/admin/sandbox/userId='+userId)
         .then(response=>response.json())
         .then(data=>fillTheTable(data));
     }

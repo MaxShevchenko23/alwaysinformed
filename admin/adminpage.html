@@ -29,7 +29,7 @@
     let categories;
     let articleStatuses;
     (function(){
-        fetch('https://localhost:7115/api/Category')
+        fetch('https://localhost:7115/Category')
         .then(response =>response.json())
         .then(data=>categories=data)
         .then(getStatuses())
@@ -38,13 +38,13 @@
 
 
     function getStatuses() {
-        fetch('https://localhost:7115/api/ArticleSandboxStatus')
+        fetch('https://localhost:7115/ArticleSandboxStatus')
         .then(response =>response.json())
         .then(data=>articleStatuses=data);
     }
 
     function getArticlesSandbox() {
-        fetch("https://localhost:7115/api/ArticleSandbox")
+        fetch("https://localhost:7115/api/admin/sandbox")
         .then(response=>response.json())
         .then(data=>fillTheTable(data));
     }
@@ -106,19 +106,20 @@
         }
     }
 
-    function archiveArticleSandbox(id) {
-        console.log(id);
-        fetch(`https://localhost:7115/api/ArticleSandbox/archive?id=${id}`,{
-                method: "PUT" });
-    }
     function publishArticleSandbox(id) {
-        fetch(`https://localhost:7115/api/ArticleSandbox/publish?articleSandboxId=${id}`,{
+        fetch(`https://localhost:7115/ArticleSandbox/publish?articleSandboxId=${id}`,{
+            method: "POST" });
+    }
+    async function archiveArticleSandbox(id) {
+        console.log(id);
+        await fetch(`https://localhost:7115/ArticleSandbox/archive?id=${id}`,{
                 method: "PUT" });
+        window.reload();
     }
     function declineArticleSandbox(id) {
         let comment = fulfillingAdminComment();
 
-        fetch(`https://localhost:7115/api/ArticleSandbox/decline?id=${id}&comment=${comment}`,{
+        fetch(`https://localhost:7115/ArticleSandbox/decline?id=${id}&comment=${comment}`,{
             method:'PUT'
         })
     }
@@ -128,7 +129,7 @@
     }
 
     function reload() {
-        location.reload();
+        window.location.reload();
     }
 </script>
 </html>

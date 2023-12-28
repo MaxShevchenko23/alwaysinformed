@@ -132,7 +132,7 @@
                 var data = urlParams.get("article-url");
                 console.log(data.toString());
                 
-                fetch('https://localhost:7115/api/Article/get/full/url?url=' + data.toString())
+                fetch('https://localhost:7115/api/user/articles/url?url=' + data.toString())
                 .then(response => response.json())
                 .then(data => {
                     
@@ -153,7 +153,7 @@
                     
                     publicationDate.innerHTML = 'Published ' + data.publicationDate.replace('T', ' ');
 
-                    fetch('https://localhost:7115/api/Author/get/id?id=' + data.authorId)
+                    fetch('https://localhost:7115/Author/id?id=' + data.authorId)
                     .then(response=>response.json())
                     .then(data =>{
                         const author = document.querySelector('#article-metainfo .author');
@@ -167,7 +167,7 @@
 
             function commentsSetting(articleId) {
                 console.log('comment fetching started for article ' + articleId);
-                fetch(`https://localhost:7115/api/Comment/getbyaarticleid?articleId=${articleId}`)
+                fetch(`https://localhost:7115/Comment/articleId?articleId=${articleId}`)
                 .then(response => response.json())
                 .then(data => {
                         data.forEach(comment => {

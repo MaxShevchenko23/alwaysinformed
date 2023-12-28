@@ -113,7 +113,7 @@
                 var data = urlParams.get("articlesandbox-url");
                 console.log(data.toString());
                 
-                fetch('https://localhost:7115/api/ArticleSandbox/get/url?url=' + data.toString())
+                fetch('https://localhost:7115/ArticleSandbox/url?url=' + data.toString())
                 .then(response => response.json())
                 .then(data => {
 
@@ -133,7 +133,7 @@
 
 
 
-                    fetch('https://localhost:7115/api/Author/get/id?id=' + data.authorId)
+                    fetch('https://localhost:7115/Author/id?id=' + data.authorId)
                     .then(response=>response.json())
                     .then(data =>{
                         const author = document.querySelector('#article-metainfo .author');

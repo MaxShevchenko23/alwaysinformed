@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="authorization.styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script src="../js/tokenProccessing.js"></script>
+    
+    <title>Авторизация</title>
+    
+</head>
+<body class="bg-primary d-flex align-items-center justify-content-center" style="height: 100vh;">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <form class="bg-white p-4 rounded shadow">
+                    <div class="text-center mb-4">
+                        <img src="../img/new logo.png" alt="Логотип" class="img-fluid">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" onchange="onChanged()" class="form-control" id="username" name="username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" onchange="onChanged()" class="form-control" id="password" name="password" required>
+                    </div>
+
+                    <input type="button" value="Submit" class="btn btn-success btn-block mt-3" onclick="send()"></input>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+<script>
+    function onChanged() {
+        const userName = document.getElementById("username");
+        const password = document.getElementById("password");
+
+        userName.style.color = 'black';
+        password.style.color = 'black'
+        
+    }
+    async function send() {
+        const userName = document.getElementById("username");
+        const password = document.getElementById("password");
+
+        var bool = await sendLoginRequest(userName.value,password.value);
+
+        if(bool){
+           let userRole = parseTokenData(getCookie('token')).userRole;
+           loadDocumentByRole(userRole);
+        }
+        else{
+            userName.style.color = 'red';
+            password.style.color = 'red'
+        }
+
+    }    
+
+        // let body = {
+        //               "userName": "string",
+        //               "password": "string"
+        //             }
+        // const requestOptions = {
+        //         method: 'POST',
+        //         headers: { 'Content-Type': 'application/json',
+        //                    'Origin':'test'},
+        //         body: body 
+        //     };
+        //     console.log(requestOptions);
+
+        //     fetch('https://localhost:7115/api/authentication/authenticate', requestOptions)
+        //     .then(handleTokenResponse)
+        //     .catch(console.log('fetching error'))
+        
+        
+
+    // function handleTokenResponse(response) {
+    //     if (response.ok) {
+    //         // Парсим JSON-ответ, предположим, что в нем есть поле "token"
+    //         response.json().then(data => {
+    //             // Вызываем функцию для записи токена в куки
+    //             console.log(data.token);
+    //             setTokenCookie(data.token);
+    //         });
+    //     } else {
+    //         console.error(`Ошибка при получении токена: ${response.status}`);
+    //     }
+    // }
+
+    // function setTokenCookie() {
+    //     const testTokenField = document.getElementById("test");
+    //     const token = testTokenField.value;
+    //     if(token==""){
+    //         console.log("token is empty");
+    //         return;
+    //     }
+    //         const currentDate = new Date();
+
+        
+    //         const expirationDate = new Date(currentDate.getTime() + (1 * 24 * 60 * 60 * 1000));
+
+    //         // Форматируем дату истечения срока годности в строку GMT
+    //         const expires = expirationDate.toUTCString();
+
+    //         // Устанавливаем куку с именем "token", значением токена и сроком годности
+    //         document.cookie = `token=${token}; expires=${expires}; path=/`;
+
+    //         // Ваш код дальнейших действий после записи токена
+    //         console.log('Токен успешно записан в куки');
+            
+
+    //         //считывание данных, т.к. userId, userRole, userName и запись их в куки
+    //         const base64Url = token.split('.')[1];
+    //         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    //         const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+    //                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    //                         }).join(''));
+            
+            
+            
+    //         const tokenCookie = getcookie('token');     
+
+    //         if (tokenCookie) {
+    //             // Распарсиваем токен
+    //             const tokenData = parseTokenData(tokenCookie);
+
+    //             // Обработка данных из токена
+    //             console.log('Данные из токена:', tokenData);
+    //             //tokenData это объект с нужными данными
+    //         } else {
+    //             console.log('Токен не найден в куках.');
+    //         }
+    //     }
+
+        // function getcookie(name) {
+        //         const value = `; ${document.cookie}`;
+        //         const parts = value.split(`; ${name}=`);
+        //         if (parts.length === 2) return parts.pop().split(';').shift();
+        //     }
+
+
+        // function getCookie(name) {
+        //     const cookies = document.cookie.split(';');
+        //     for (const cookie of cookies) {
+        //         const [cookieName, cookieValue] = cookie.trim().split('=');
+        //         if (cookieName === name) {
+        //             return cookieValue;
+        //         }
+        //     }
+        //     return null;
+        // }
+
+        // function parseJwt(token) {
+        //         const base64Url = token.split('.')[1];
+        //         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        //         const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        //             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        //         }).join(''));
+
+        //         return JSON.parse(jsonPayload);
+        //     }
+        // Пример использования функции с полученным токеном
+</script>
+</html>

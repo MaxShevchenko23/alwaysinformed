@@ -1,0 +1,27 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+header {
+    text-align: center;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+section {
+    margin-top: 20px;
+}
+h2 {
+    color: #333;
+}
+.user-details {
+    display: flex;
+    justify-content: space-between;
+}
+.user-details div {
+    flex: 1;
+    margin-right: 20px;
+}
+#user-avatar {
+    max-width: 100px;
+    border-radius: 50%;
+}

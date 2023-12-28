@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User data editing</title>
+    <!-- Подключение Bootstrap CSS -->
+    <script src="../js/tokenProccessing.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>User data editing</h2>
+
+    <form>
+        <div class="form-group">
+            <label for="username">User's name:</label>
+            <input type="text" class="form-control" id="username" name="username" value="Current username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" value="Current email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">New password:</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Type new password">
+        </div>
+
+        <div class="form-group">
+            <label for="confirmPassword">Confirm password:</label>
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password">
+        </div>
+
+    </form>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+</div>
+
+
+
+
+</body>
+<script> 
+    (async ()=>{
+        const cookie = parseTokenData(getCookie('token'));
+        const emailElement = document.getElementById('email');
+        const usernameElement = document.getElementById('username');
+
+        emailElement.value = cookie.userEmail;
+        usernameElement.value = cookie.userName;
+    })()
+
+
+
+</script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</html>

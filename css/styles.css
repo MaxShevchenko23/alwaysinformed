@@ -25,7 +25,9 @@ nav {
     padding: 0 10px 0 10px;
     text-decoration: none;
 }
-
+fs-4::after{
+    content: url(../img/new\ logo.png);
+}
 nav a {
     color: white;
 }
