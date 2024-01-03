@@ -1,12 +1,12 @@
 async function sendLoginRequest(userName, password)  {
  
-    let accessBool = Boolean(false);
+        let accessBool = Boolean(false);
 
-    let body = {
+        let body = {
                   "userName": userName.toString(),
                   "password": password.toString()
                 }
-    const requestOptions = {
+        const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json',
                        'Origin':'test'},
@@ -50,30 +50,20 @@ function setTokenCookie(token) {
             throw new Error('token is empty')
         } 
 
-            const currentDate = new Date();
-            const expirationDate = new Date(currentDate.getTime() + (1 * 24 * 60 * 60 * 1000)).toUTCString();
-
-            // Устанавливаем куки с именем "token", значением токена и сроком годности
-            document.cookie = `token=${token}; expires=${expirationDate}; path=/`;
-
-            console.info('Токен успешно записан в куки');  
-            return true;
-            // Ваш код дальнейших действий после записи токена
+        const currentDate = new Date();
+        const expirationDate = new Date(currentDate.getTime() + (1 * 24 * 60 * 60 * 1000)).toUTCString();
+        // Устанавливаем куки с именем "token", значением токена и сроком годности
+        document.cookie = `token=${token}; expires=${expirationDate}; path=/`;
+        console.info('Токен успешно записан в куки');  
+        return true;
+        // Ваш код дальнейших действий после записи токена
     }
     catch(e)
     {
-            console.error(e);
-            return false;
+        console.error(e);
+        return false;
     }
 }
-
-    // function getcookie(name) {
-    //         const value = `; ${document.cookie}`;
-    //         const parts = value.split(`; ${name}=`);
-    //         if (parts.length === 2) 
-    //             return parts.pop().split(';').shift();
-    //     }
-
 
     function getCookie(name) {
         const cookies = document.cookie.split(';');
@@ -98,13 +88,14 @@ function setTokenCookie(token) {
     function loadDocumentByRole(role) {
     switch (role) {
         case 'reader':
-            window.location.href = "../user/index.html"
+            window.location.href = "../user/index.html";
             break;
         case 'admin':
-            window.location.href = "../admin/adminpage.html"
+            window.location.href = "../admin/adminpage.html";
             break;
         case 'author':
-                window.location.href = "../author/author.html"
+            window.location.href = "../author/author.html";
+            break;
         default:
             break;
     }

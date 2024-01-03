@@ -2,32 +2,47 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="../css/article.css">
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+        <script src="../js/index.js"></script>
+
     </head>
     
     <body>
-        <div class="nav">
-            <nav>
-                <img class="logo" src="../img/logo template.png">
-                <a class="nav-button" href="../user/index.html">
-                    Home
-                </a>
-                <a class="nav-button" href="#">
-                    World
-                </a>
-                <a class="nav-button" href="#">
-                    Politics
-                </a>
-                <a class="nav-button" href="#">
-                    Business
-                </a>
-                <a class="nav-button" href="#">
-                    Health
-                </a>
-                <a class="nav-button" href="#">
-                    Entertainment
-                </a>
+        <header>
+            <!-- Fixed navbar -->
+            <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #001A37;">
+              <a class="navbar-brand" href="#">Always Informed</a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="index.html">Home <span class="sr-only"></span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Technology</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Science</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Sports</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Health</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="" id="profile">Log in</a>
+                  </li>
+                </ul>
+                <form class="form-inline mt-2 mt-md-0">
+                  <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+              </div>
             </nav>
-        </div>
+        </header>
         <main>
             <div id="article-name">
                 <h1>Article name</h1>
@@ -125,6 +140,7 @@
             
             const commentSection = document.querySelector('section');
             (function() {
+                checkCredentials();
                 var location = window.location.search;
                 console.log(location);
                 var urlParams = new URLSearchParams(location);
@@ -153,33 +169,24 @@
                     
                     publicationDate.innerHTML = 'Published ' + data.publicationDate.replace('T', ' ');
 
-                    fetch('https://localhost:7115/Author/id?id=' + data.authorId)
-                    .then(response=>response.json())
-                    .then(data =>{
-                        const author = document.querySelector('#article-metainfo .author');
-                        author.innerHTML = 'Author ' + data.firstName + ' ' + data.lastName;
-                    });
-                    
-                    commentsSetting(articleId);
-                });
-            })()
+                    const author = document.querySelector('#article-metainfo .author');
+                    author.innerHTML = 'Author: ' + data.firstName + ' ' + data.lastName;
 
+                    const comments = data.comments;
 
-            function commentsSetting(articleId) {
-                console.log('comment fetching started for article ' + articleId);
-                fetch(`https://localhost:7115/Comment/articleId?articleId=${articleId}`)
-                .then(response => response.json())
-                .then(data => {
-                        data.forEach(comment => {
-                            commentSection.innerHTML += `<div class="comment">
+                    comments.forEach(comment => {
+                        commentSection.innerHTML += `<div class="comment">
                                                             <strong>${comment.userName}</strong>
                                                             <p> ${comment.text}</p>
                                                             <small>Posted on: 2023-11-26 12:30</small>
                                                         </div>`
-                        });
-                        })
-                        .catch(() => console.log('comment fetching failed'));
-}
+                    });
+                });
+            })()
+
+
+           
+
 
         </script>
     </body>

@@ -47,7 +47,7 @@
         var urlParams = new URLSearchParams(location);
         var data = urlParams.get("article-url");
                 
-    fetch('https://localhost:7115/ArticleSandbox/url?url=' + data)
+    fetch('https://localhost:7115/api/author/sandbox/url?url=' + data)
     .then(response => response.json())
     .then(article => {
         articleFromBack = article;
@@ -63,7 +63,7 @@
     .catch(() => console.log('Fetching failed(article)'));
 
 
-    fetch('https://localhost:7115/Category')
+    fetch('https://localhost:7115/api/category')
     .then(response => response.json())
     .then(data => {
         categories = data;
@@ -106,12 +106,12 @@
         console.log(article);
 
         const requestOptions = {
-                method: 'POST',
+                method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(article)
                 };
 
-        fetch('https://localhost:7115/ArticleSandbox',requestOptions)
+        fetch('https://localhost:7115/api/author/sandbox/update',requestOptions)
         .catch('submitting failed');
     }
 </script>

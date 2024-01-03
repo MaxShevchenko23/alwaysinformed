@@ -27,36 +27,100 @@
 
         <div class="form-group">
             <label for="password">New password:</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Type new password">
+            <input type="password" class="form-control password" id="password" name="password" placeholder="Type new password">
         </div>
 
         <div class="form-group">
             <label for="confirmPassword">Confirm password:</label>
-            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password">
+            <input type="password" class="form-control password" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password">
         </div>
-
+        <div id="message" style="color: red;" class="m-2">
+        </div>
     </form>
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button onclick="submit()" class="btn btn-primary">Save changes</button>
 </div>
-
-
 
 
 </body>
 <script> 
+
+    const usernameElement = document.getElementById('username');
+    const emailElement = document.getElementById('email');
+    const passwordFields = document.getElementsByClassName('password');
+    
+    const messageDiv = document.getElementById('message');
+
+    const cookie = parseTokenData(getCookie('token'));
+    
     (async ()=>{
-        const cookie = parseTokenData(getCookie('token'));
-        const emailElement = document.getElementById('email');
-        const usernameElement = document.getElementById('username');
 
-        emailElement.value = cookie.userEmail;
-        usernameElement.value = cookie.userName;
+        emailElement.value = cookie.userEmail ?? " ";
+        usernameElement.value = cookie.userName ?? " ";
     })()
+    
+    function submit() {
+        if(usernameElement.value.length <= 5){
+            messageDiv.innerText = " ";
+            messageDiv.innerText += "Username is too short";
+        }
+        else if(!emailElement.value.includes('@') || !emailElement.value.includes('.')){
+            messageDiv.innerText = " ";
+            messageDiv.innerText += "Check email";
+        }
+        else{
+            messageDiv.innerText = " ";
+            if (passwordFields[0].value !== passwordFields[1].value && passwordFields[0].value.length<8){
+                messageDiv.innerText = " ";
+                messageDiv.innerText += "Passwords don't match";
+            }
+            else{
+                let body = {
+                    "userId": cookie.id,
+                    "username": usernameElement.value,
+                    "passwordHash": passwordFields[0].value,
+                    "email": emailElement.value,
+                    "userRole": 8,
+                    "userPhoto": cookie.userPhoto
+                }
+                console.log(body);
+                const requestOptions = {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json',
+                             'Origin':'test'
+                    },
+                    body: JSON.stringify(body) 
+                };
+                fetch('https://localhost:7115/api/user/edit', requestOptions)
+                .then(response => {
+                    if(!response.ok){
+                        throw new Error(`Server didn't accept the data. Status ${response.status}`)
+                    }
+                    else{
+                        let body = {
+                            "username": usernameElement.value,
+                            "passwordHash": passwordFields[0].value
+                        }
 
-
+                        const requestOptions = {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json',
+                                       'Origin':'test'},
+                            body: JSON.stringify(body) 
+                            };
+                        
+                            fetch('https://localhost:7115/api/authentication/authenticate', requestOptions)
+                            .then(response => setTokenCookie(response.token))
+                            .catch(e=>console.log(e));
+                            console.log('succ ass');
+    
+                    }
+                })
+                .catch(e=>console.log(e))
+            }    console.log('succ ass');
+        }
+}
+    
 
 </script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
 </html>
