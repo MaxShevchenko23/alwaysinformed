@@ -13,8 +13,8 @@
         <p id="credentials" class="m-3 fw-bold display-6"></p>
     </div>
     <nav class="d-flex justify-content-center">
-        <input type="button" class="btn btn-outline-success m-3  w-75" onclick="location.href ='articlesandboxcreate.html';" value="Create">
-
+      <input type="button" class="btn btn-outline-info m-3  w-75" onclick="location.href ='../user/index.html';" value="Go to main">
+      <input type="button" class="btn btn-outline-success m-3  w-75" onclick="location.href ='articlesandboxcreate.html';" value="Create">
     </nav>
     <table class="table m-3">
         <colgroup span="5"></colgroup>
@@ -28,18 +28,39 @@
         
         
       </table>
+      <section>
+        <h2 class="m-3">Statistics</h2>
+      </section>
+      <div class="container mt-4">
+        <table id="table" class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Article's name</th>
+              <th scope="col">Likes</th>
+              <th scope="col">Views</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+          </tbody>
+        </table>
+      </div>
 </body>
 <script>
 
     let categories;
     let articleStatuses;
 
+    let stats;
+
     const creds = document.getElementById('credentials');
+    const table = document.getElementById('table');
 
     (async function(){
         await fetch('https://localhost:7115/api/category')
         .then(response =>response.json())
-        .then(data=>categories=data);
+        .then(data=>categories = data);
 
         await fetch('https://localhost:7115/api/sandboxstatus')
         .then(response =>response.json())
@@ -48,6 +69,21 @@
         load();
 
         creds.innerText =`Hello,  ${parseTokenData(getCookie('token')).userName}`;
+
+        await fetch(`https://localhost:7115/api/author/stats/userId?userId=${ parseTokenData(getCookie('token')).id }`)
+        .then(response =>response.json())
+        .then(data => stats = data)
+        .catch(e=>console.log(e));
+
+        var counter = 0;
+        stats.forEach(stat => {
+            let name = 
+            table.innerHTML += `<th scope="row">${++counter}</th>
+                                <td>${stat.articleName}</td>
+                                <td>${stat.likes}</td>
+                                <td>${stat.views}</td>`
+        });
+
     })();
     
     function load(){
@@ -72,7 +108,7 @@
                     <td class="col-5 border">${articleSandbox.url}</a></td>`;
                     
                     if(articleSandbox.articleStatus == 2){
-                        row.innerHTML+=`<td><div class="btn btn-primary m-1 text-dark"><a href="${'../user/article.html?article-url=' + articleSandbox.url}" target="_blank">Open</a></div></td>
+                        row.innerHTML+=`<td><div class="btn btn-primary m-1 text-dark"><a href="${'articleAuthor.html?article-url=' + articleSandbox.url}" target="_blank">Open</a></div></td>
                                         <td><a href="articlesandboxedit.html?article-url=${articleSandbox.url}" class="btn btn-warning" target='_blank'>Edit</td><td class='m-3'> </td>
                                         <td><a style="cursor:pointer;" onclick="viewStats(${articleSandbox.sandboxId})" class="btn btn-group-vertical">Stats </td>`;
                     }

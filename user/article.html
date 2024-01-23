@@ -3,7 +3,9 @@
     <head>
         <link rel="stylesheet" type="text/css" href="../css/article.css">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.tiny.cloud/1/ury8b9gyx5sbknq40l8lrqhx1v8556ve0vhztxmkslkrk5on/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
         <script src="../js/index.js"></script>
+        <script src="../js/tokenProccessing.js"></script>
 
     </head>
     
@@ -44,17 +46,17 @@
             </nav>
         </header>
         <main>
-            <div id="article-name">
+            <div id="article-name" class="mt-5">
                 <h1>Article name</h1>
             </div>
             <div id="article-metainfo">
                 <div class="date">Published: 23.09.2023 12:58</div>
                 <div class="author">Author: Max Shevchenko</div>
             </div>
-            <div id="article-image">
-                <img class="article-image" src="">
+            <div class="m-5" id="article-image">
+                <img class="article-image w-75" src="">
             </div>
-            <div id="article-content">
+            <div class="m-2" id="article-content">
                 <article>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
                     Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
                     Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
@@ -89,19 +91,23 @@
            
         </main>
 
-        <h3>Comments</h3>
-        <section id="comments">
+        <script>
+            tinymce.init({
+              selector: 'textarea',
+              plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+              toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+            });
+        </script>
         
-            <!-- <div class="comment">
-                <p><strong>User1:</strong> Good article!</p>
-                <small>Posted on: 2023-11-26 12:30</small>
-            </div>
+        <textarea id="area" class="m-2">
+            Great article!
+        </textarea>
         
-            <div class="comment">
-                <p><strong>Guest123:</strong> Interesting read.</p>
-                <small>Posted on: 2023-11-26 13:45</small>
-            </div> -->
-                
+        <button value="Leave a comment" class=" m-2 btn btn-success" onclick="leaveComment()">Leave a comment</button>
+        <button value="Leave a comment" class=" m-2 btn btn-outline-danger" onclick="likeArticle()" id="Like">Like this article</button>
+
+        <h3 class="m-1">Comments</h3>
+        <section id="comments">               
         </section>
         <footer>
             <div id="footer">
@@ -175,17 +181,60 @@
                     const comments = data.comments;
 
                     comments.forEach(comment => {
-                        commentSection.innerHTML += `<div class="comment">
-                                                            <strong>${comment.userName}</strong>
-                                                            <p> ${comment.text}</p>
-                                                            <small>Posted on: 2023-11-26 12:30</small>
+                        commentSection.innerHTML += `<div class="comment m-3 border">
+                                                            <strong class="m-2"> ${comment.userName} </strong>
+                                                            <p class="m-1 w-100"> ${comment.text} </p>
                                                         </div>`
                     });
                 });
             })()
 
+            function leaveComment(){
+                console.log(tinymce.activeEditor.getContent());
 
-           
+                let body = {
+                    "text": tinymce.activeEditor.getContent(),
+                    "userName": document.getElementById('profile').innerText,
+                    "articleId": articleId
+                }
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json',
+                               'Origin':'test'},
+                    body: JSON.stringify(body) 
+                };
+
+                fetch('https://localhost:7115/api/user/comms/add',requestOptions)
+                .then(response => {
+                    if(response.ok){
+                        window.location.reload();
+                    }
+                })
+                .catch(e=>console.log(e));
+            }
+            
+            function likeArticle() {
+                let body = {
+                    "userId": parseTokenData(getCookie()).id,
+                    "articleId": articleId
+                }
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json',
+                               'Origin':'test'},
+                    body: JSON.stringify(body) 
+                };
+                console.log(body);
+                fetch('https://localhost:7115/api/user/favs/add',requestOptions)
+                .then(response => {
+                    if(response.ok){
+                       var button =  document.getElementById('Like');
+                       button.innerText = 'Liked';
+                       button.setAttribute('onclick','')
+                    }
+                })
+                .catch(e=>console.log(e));
+            }
 
 
         </script>

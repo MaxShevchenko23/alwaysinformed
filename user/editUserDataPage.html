@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User data editing</title>
-    <!-- Подключение Bootstrap CSS -->
     <script src="../js/tokenProccessing.js"></script>
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -112,7 +110,8 @@
                             .then(response => setTokenCookie(response.token))
                             .catch(e=>console.log(e));
                             console.log('succ ass');
-    
+                            window.location.href = "userProfile.html"
+
                     }
                 })
                 .catch(e=>console.log(e))

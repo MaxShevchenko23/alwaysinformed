@@ -38,13 +38,49 @@ async function sendLoginRequest(userName, password)  {
         });    
         return accessBool;
 }
+
+async function sendSignUpRequest(userName, password, email)  {
+ 
+    let accessBool = Boolean(false);
+
+    let body = {
+                "username": userName,
+                "passwordHash": password,
+                "email": email,
+                "userRole": 0,
+                "userPhoto": "string"
+            }
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json',
+                   'Origin':'test'},
+        body: JSON.stringify(body) 
+    };
+    console.log(requestOptions);
+
+    await fetch('https://localhost:7115/api/user/register', requestOptions)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`(registration)Response status ${response.status}`);
+        }
+        accessBool = true;
+        return response.json(); 
+    })
+    .catch(e => {
+        console.error(e);
+        
+    });    
+    return accessBool;
+}
+
+
 function clearCookie() {
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 function setTokenCookie(token) {
     try
     {
-        if(token=="")
+        if(token=="" || token == undefined)
         {
             console.log("token is empty");
             throw new Error('token is empty')
@@ -65,7 +101,7 @@ function setTokenCookie(token) {
     }
 }
 
-    function getCookie(name) {
+    function getCookie(name = 'token') {
         const cookies = document.cookie.split(';');
         for (const cookie of cookies) {
             const [cookieName, cookieValue] = cookie.trim().split('=');

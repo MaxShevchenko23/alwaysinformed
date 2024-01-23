@@ -4,20 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="../js/tokenProccessing.js"></script>
+    <script src="https://cdn.tiny.cloud/1/ury8b9gyx5sbknq40l8lrqhx1v8556ve0vhztxmkslkrk5on/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
     <title>Article Sandbox Create</title>
 </head>
 
-<body>
-    <header class="m-lg-4">Article creating page</header>
+<body class="m-2">
+    <h3 class="m-lg-4">Article creating page</h3>
     <form>
         <label class="m-2" for="title">Title</label><br>
         <input class="input-group-text m-lg-2" type="text" id="title" name="title" value="title" required minlength="5"><br><br>
-
-        <label class="m-2" for="author">Author ID</label><br>
-        <input class="input-group-text" type="text" id="author" name="author" required="required">
-
-        <button class="btn-info m-2" type="button" onclick="getName()">Check</button>
-        <span class="text-lg-start" id="authorNameField">test</span><br><br>
 
         <label for="category">Category</label><br>
         <select class="form-select-sm m-2" name="categories" id="categories">
@@ -25,39 +22,58 @@
         </select><br><br>
 
         <label for="image">Image URL</label><br>
-        <input class="input-group-text m-2" type="text" id="image" name="image" value="image" required minlength="5"><br><br>
-
+        <input class="input-group-text m-2" type="text" id="image" name="image" value="image" required minlength="5">
+        <!-- <div>
+            <input type="button" value="Check" onclick="checkImg(document.getElementById('image').value)" class="btn btn-outline-success">
+            <img id="test" src="" style="width: 300px; height: fit-content;">
+        </div> -->
+        <br>
+        <br>
         <label for="short">Short description</label><br>
         <input class="input-group-text m-2" type="text" id="short" name="short" value="short" required minlength="10"><br><br>
 
         <label for="content">Content</label><br>
-        <input type="text" class="input-group-text m-2" id="content" name="content" value="content" required minlength="20"><br><br>
+        <!-- <input type="text" class="input-group-text m-2" id="content" name="content" value="content" required minlength="20"><br><br> -->
 
-        <button class="btn-success w-25 m-2" type="button" onclick="postData()">Save</button>
+        <script>
+            tinymce.init({
+              selector: 'textarea',
+              plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+              toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+            });
+        </script>
+        
+        <textarea id="area" class="m-2">
+            the content of your article
+        </textarea>
+
+
+        <button class="btn btn-success w-25 m-2" type="button" onclick="postData()">Save</button>
       </form> 
 </body>
 <script>
     
 
-    const selector = document.querySelector('select');
-    const title = document.getElementById('title').value;
-    const image = document.getElementById('image').value;
-    const short = document.getElementById('short').value;
-    const content = document.getElementById('content').value;
-    const authorId = document.getElementById('author');
+    let selector = document.querySelector('select');
+    let title = document.getElementById('title').value;
+    let image = document.getElementById('image').value;
+    let short = document.getElementById('short').value;
+    let content = document.getElementById('area').innerHTML;
+
     
     let categories;
+    let authorProfile;
     let categoryId;
 
-    (function(){
+    (async function(){
 
 
-
-        fetch('https://localhost:7115/Category')
-        .then(response => response.json())
-        .then(data => {
+        console.log(content);
+        await fetch('https://localhost:7115/api/author/category')
+                .then(response => response.json())
+                .then(data => {
         categories = data;
-        console.log(categories);
+        console.log(categories ?? 'categories didn`t load');
 
         categories.forEach(cat => {
             selector.innerHTML += `<option value='${cat.categoryId}'>${cat.categoryName}</option>`;
@@ -65,8 +81,10 @@
     })
     .catch(() => console.log('Fetching failed(category)'));
 
-
-
+    await fetch(`https://localhost:7115/api/author/profile?userId=${parseTokenData(getCookie()).id}`)
+            .then(response => response.json())
+            .then(data => authorProfile = data)
+            .catch(e=>console.log(e));
 
     })();
 
@@ -82,12 +100,17 @@
         }
     }
 
-    //change inner code for 'POST' method
     function postData(){
-      
+        
+        let selector = document.querySelector('select');
+        let title = document.getElementById('title').value;
+        let image = document.getElementById('image').value;
+        let short = document.getElementById('short').value;
+        let content = document.getElementById('area').value;
+
         const article = 
             {
-                "authorId": parseInt(authorId.value, 10),
+                "authorId": authorProfile.authorId,
                 "content": content,
                 "categoryId": parseInt(selector.value, 10),
                 "image": image,
@@ -106,7 +129,7 @@
                 body: JSON.stringify(article)
                 };
 
-        fetch('https://localhost:7115/ArticleSandbox', requestOptions)
+        fetch('https://localhost:7115/api/author/sandbox/add', requestOptions)
         .catch(()=> console.log('posting failed'));
     }
 
@@ -114,11 +137,12 @@
         const authorId = document.getElementById('author').value;
         const testField = document.getElementById('authorNameField');
 
-        fetch(`https://localhost:7115/Author/id?id= + ${authorId}`)
+        fetch(`https://localhost:7115/api/author/profile?userId= + ${authorId}`)
         .then(response => response.json())
         .then(author => {
             testField.innerText = `${author.firstName} ${author.lastName}`
         });
     }
+
 </script>
 </html>

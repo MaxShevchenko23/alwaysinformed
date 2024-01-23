@@ -40,36 +40,7 @@
                 <img class="article-image" src="">
             </div>
             <div id="article-content">
-                <article>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                </article><br>
-
-                <article>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                </article><br>
-
-                <article>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                </article><br>
-
-                            
-                <article>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                </article><br>
-
-                <article>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                </article><br>
-
-                <article>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Praesentium ratione, labore deserunt ut beatae nam et quae, necessitatibus perspiciatis placeat repudiandae commodi ex illo odio illum quos, ad magni quisquam?
-                </article><br>
+                
             </div>
            
         </main>
@@ -113,7 +84,7 @@
                 var data = urlParams.get("articlesandbox-url");
                 console.log(data.toString());
                 
-                fetch('https://localhost:7115/ArticleSandbox/url?url=' + data.toString())
+                fetch('https://localhost:7115/api/admin/sandbox/url?url=' + data.toString())
                 .then(response => response.json())
                 .then(data => {
 

@@ -36,9 +36,9 @@
               <li class="nav-item">
                 <a class="nav-link" href="" onclick="filterByCategory(document.getElementsByClassName('nav-link')[4].innerText)">Health</a>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a class="nav-link" href="" id="profile">Log in</a>
-              </li>
+              </li> -->
             </ul>
             <form class="form-inline mt-2 mt-md-0">
               <input class="form-control mr-sm-2" type="text" id="searchArea" placeholder="Search" aria-label="Search">
@@ -52,13 +52,20 @@
         <h2>User Details</h2>
         <div class="user-details">
             <div>
-                <p>Photo:</p>
+                <h4>Photo:</h4>
                 <img src="" alt="User Avatar" id="user-avatar" style="width: 70px;" class="img-fluid rounded-circle">
+            </div>
+            <div>
+              <h4>Role:</h4>
+              <p id="userRole"></p>
+              <div id="toDisplay">
+                <a href="../admin/adminSandbox.html" class="btn btn-warning">Show admin's panel</a>
+              </div>
             </div>
             <div>
                 <!-- Use Bootstrap classes for styling -->
                 <p class="font-weight-bold"></p>
-                <p id="user-name" class="mb-4"></p>
+                <h4>Name</h4><p id="user-name" class="mb-4"></p>
                 <button class="btn btn-info" onclick="loadEditPage()">Edit data</button>
                 <!-- Add more details as needed -->
             </div>
@@ -73,21 +80,40 @@
         <!-- Add more sections as needed -->
     </section class="m-3">
     <button  class="btn btn-danger rounded m-3" onclick="logOut()">Log out</button>
-    <!-- Add more sections as needed -->
+        <!-- Add more sections as needed -->
     
     <script>
         (async ()=>{
             const photoElement = document.getElementById("user-avatar");
             const nameElement = document.getElementById("user-name");
 
+            const userRole = document.getElementById('userRole');
+
             const favsList = document.getElementById('favs-list');
 
+            const displayDiv = document.getElementById('toDisplay');
             const cookie = parseTokenData(getCookie('token'));
 
             let favs = undefined;
 
-            nameElement.innerText = `Name: ${cookie.userName}`;
+            nameElement.innerText = `${cookie.userName}`;
             photoElement.setAttribute('src', cookie.userPhoto);
+
+            userRole.innerText = cookie.userRole;
+            
+            switch (cookie.userRole) {
+              case 'reader':
+                  displayDiv.innerHTML = `<a href="bindAuthor.html" class="btn btn-dark">Bind author</a>`
+                break;
+                case 'author':
+                  displayDiv.innerHTML = `<a href="../author/author.html" class="btn btn-secondary">Open author's profile</a>`
+                break;
+                case 'admin':
+                  
+                  break;
+              default:
+                break;
+            }
 
             await fetch(`https://localhost:7115/api/user/favs/userId?userId=${cookie.id}`)
                     .then(response=>response.json())

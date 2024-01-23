@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Article Sandbox Edit</title>
+    <script src="https://cdn.tiny.cloud/1/ury8b9gyx5sbknq40l8lrqhx1v8556ve0vhztxmkslkrk5on/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
-<body>
-    <header class="offcanvas-header">Article editing page</header>
+<body class="m-2">
+    <h3 class="offcanvas-header">Article editing page</h3>
     <form class="form-control">
         <label for="title">Title</label><br>
         <input class="input-group-text" type="text" id="title" name="title" value="title"><br><br>
@@ -23,8 +24,17 @@
         <input class="input-group-text" type="text" id="short" name="short" value="short"><br><br>
 
         <label for="content">Content</label><br>
-        <input class="input-group-text" type="text" id="content" name="content" value="content"><br><br>
-
+        <script>
+            tinymce.init({
+              selector: 'textarea',
+              plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+              toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+            });
+        </script>
+        
+        <textarea id="area" class="m-2">
+            the content of your article
+        </textarea>
         <button class="btn-success" type="button" onclick="submitData()">Save</button>
       </form> 
 </body>
@@ -34,7 +44,7 @@
     const title = document.getElementById('title');
     const image = document.getElementById('image');
     const short = document.getElementById('short');
-    const content = document.getElementById('content');
+    const content = document.getElementById('area');
     
     let categories;
     let categoryId;
@@ -55,13 +65,12 @@
         title.value = article.title;
         image.value = article.image;
         short.value = article.shortDescription;
-        content.value = article.content;
+        content.innerHTML = article.content;
 
         categoryId = article.categoryId;
         console.log(categoryId);
     })
     .catch(() => console.log('Fetching failed(article)'));
-
 
     fetch('https://localhost:7115/api/category')
     .then(response => response.json())
@@ -113,6 +122,8 @@
 
         fetch('https://localhost:7115/api/author/sandbox/update',requestOptions)
         .catch('submitting failed');
+        console.log('succass');
+        window.close();
     }
 </script>
 </html>
